@@ -1,10 +1,8 @@
 import argparse
 import base64
 import json
-import os
 import urllib.request
 from io import BytesIO
-from json import JSONDecodeError
 from typing import Union
 
 import requests
@@ -49,7 +47,7 @@ def player_by_uuid(uuid: str) -> Union[tuple, None]:
             return None
 
 
-def process_skin(player: tuple, overlays=True) -> tuple:
+def process_skin(player: tuple) -> tuple:
     width, height = player[1].size
 
     if height == 64:
@@ -68,7 +66,7 @@ def main():
     player = player_by_name(args.n)
 
     if player is not None:
-        player = process_skin(player, overlays=True)
+        player = process_skin(player)
         player[1].save(f'{player[0]}.png')
 
 
