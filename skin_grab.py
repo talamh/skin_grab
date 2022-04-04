@@ -6,14 +6,14 @@ from typing import Union
 
 import requests
 from PIL import Image
-import json
 from json import JSONDecodeError
+from json import loads
 
 
 def player_by_name(player_name: str) -> Union[tuple, None]:
     with urllib.request.urlopen(f'https://api.mojang.com/users/profiles/minecraft/{player_name}') as url:
         try:
-            data = json.loads(url.read().decode())
+            data = loads(url.read().decode())
         except JSONDecodeError:
             print(f'player {player_name} not found')
             return None
@@ -29,14 +29,14 @@ def player_by_name(player_name: str) -> Union[tuple, None]:
 def player_by_uuid(uuid: str) -> Union[tuple, None]:
     with urllib.request.urlopen(f'https://sessionserver.mojang.com/session/minecraft/profile/{uuid}') as url:
         try:
-            data = json.loads(url.read().decode())
+            data = loads(url.read().decode())
         except JSONDecodeError:
             print(f'player with uuid {uuid} not found')
             return None
 
         player_name = data.get('name')
-        data = json.loads(base64.b64decode(data.get('properties')[0]
-                                           .get("value"))).get('textures').get('SKIN').get('url')
+        data = loads(base64.b64decode(data.get('properties')[0]
+                                      .get("value"))).get('textures').get('SKIN').get('url')
 
         r = requests.get(data, stream=True)
 
@@ -63,16 +63,14 @@ def process_skin(player: tuple) -> tuple:
     # body
     layer_1 = player[1].crop((20, 20, 28, 32))
     skin_preview.paste(layer_1, (4, 8), layer_1)
-    
+
     # right leg
     layer_1 = player[1].crop((4, 20, 8, 32))
     skin_preview.paste(layer_1, (4, 20), layer_1)
 
-   
     # right arm
     layer_1 = player[1].crop((44, 20, 48, 32))
     skin_preview.paste(layer_1, (0, 8), layer_1)
-
 
     if height == 64:
         # left arm
@@ -117,8 +115,7 @@ def process_skin(player: tuple) -> tuple:
         # left leg
         layer_1 = player[1].crop((4, 20, 8, 32))
         skin_preview.paste(layer_1, (8, 20), layer_1)
-        
-    
+
         return player[0], player[1], skin_preview
 
 
