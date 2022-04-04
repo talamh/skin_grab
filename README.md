@@ -14,7 +14,7 @@ requests
 
 `$ pip install requests`
 
-## requirements
+## usage
 
 To only use the top half of 64x64 Minecraft skins:
 
