@@ -63,22 +63,25 @@ def process_skin(player: tuple) -> tuple:
     # body
     layer_1 = player[1].crop((20, 20, 28, 32))
     skin_preview.paste(layer_1, (4, 8), layer_1)
+    
+    # right leg
+    layer_1 = player[1].crop((4, 20, 8, 32))
+    skin_preview.paste(layer_1, (4, 20), layer_1)
+
+   
+    # right arm
+    layer_1 = player[1].crop((44, 20, 48, 32))
+    skin_preview.paste(layer_1, (0, 8), layer_1)
+
 
     if height == 64:
-        # right leg
-        layer_1 = player[1].crop((4, 20, 8, 32))
-        skin_preview.paste(layer_1, (4, 20), layer_1)
+        # left arm
+        layer_1 = player[1].crop((36, 52, 40, 64))
+        skin_preview.paste(layer_1, (12, 8), layer_1)
 
         # left leg
         layer_1 = player[1].crop((20, 52, 24, 64))
         skin_preview.paste(layer_1, (8, 20), layer_1)
-        # right arm
-        layer_1 = player[1].crop((44, 20, 48, 32))
-        skin_preview.paste(layer_1, (0, 8), layer_1)
-
-        # left arm
-        layer_1 = player[1].crop((36, 52, 40, 64))
-        skin_preview.paste(layer_1, (12, 8), layer_1)
 
         layer_0 = player[1].crop((0, 0, width, 32))
 
@@ -107,7 +110,16 @@ def process_skin(player: tuple) -> tuple:
 
         return player[0], layer_0, skin_preview
     else:
-        return player
+        # left arm
+        layer_1 = player[1].crop((44, 20, 48, 32))
+        skin_preview.paste(layer_1, (12, 8), layer_1)
+
+        # left leg
+        layer_1 = player[1].crop((4, 20, 8, 32))
+        skin_preview.paste(layer_1, (8, 20), layer_1)
+        
+    
+        return player[0], player[1], skin_preview
 
 
 def main():
