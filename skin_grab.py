@@ -81,12 +81,12 @@ def process_skin(player: tuple) -> tuple:
         layer_1 = player[1].crop((20, 52, 24, 64))
         skin_preview.paste(layer_1, (8, 20), layer_1)
 
-        layer_0 = player[1].crop((0, 0, width, 32))
+        mt_skin = player[1].crop((0, 0, width, 32))
 
         # optionally use overlays from bottom half
         if args.overlays:
             layer_1 = player[1].crop((0, 32, width, 48))
-            layer_0.paste(layer_1, (0, 16), layer_1)
+            mt_skin.paste(layer_1, (0, 16), layer_1)
             # right leg overlay
             layer_1 = player[1].crop((4, 36, 8, 48))
             skin_preview.paste(layer_1, (4, 20), layer_1)
@@ -106,7 +106,7 @@ def process_skin(player: tuple) -> tuple:
             layer_1 = player[1].crop((20, 36, 28, 48))
             skin_preview.paste(layer_1, (4, 8), layer_1)
 
-        return player[0], layer_0, skin_preview
+        return player[0], mt_skin, skin_preview
     else:
         # left arm
         layer_1 = player[1].crop((44, 20, 48, 32))
@@ -126,6 +126,7 @@ def main():
         player = process_skin(player)
         player[1].save(f'{player[0]}.png')
         player[2].save(f'preview_{player[0]}.png')
+        print(f'{player[0]} skin downloaded successfully.')
 
 
 parser = argparse.ArgumentParser(description="Minecraft skin downloader/converter.")
