@@ -61,11 +61,12 @@ def process_skin(player: tuple) -> tuple:
 
     # head
     layer_1 = player[1].crop((8, 8, 16, 16))
-
     skin_preview.paste(layer_1, (4, 0))
+
     # hair/glasses etc
     layer_1 = player[1].crop((40, 8, 48, 16))
     skin_preview.paste(layer_1, (4, 0), layer_1)
+
     # body
     layer_1 = player[1].crop((20, 20, 28, 32))
     skin_preview.paste(layer_1, (4, 8), layer_1)
