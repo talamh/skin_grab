@@ -4,14 +4,17 @@ import urllib.request
 from io import BytesIO
 from typing import Union
 
-import requests
-from PIL import Image
 from json import JSONDecodeError
 from json import loads
 
+import requests
+from PIL import Image
+
 
 def player_by_name(player_name: str) -> Union[tuple, None]:
-    with urllib.request.urlopen(f'https://api.mojang.com/users/profiles/minecraft/{player_name}') as url:
+    """ download the minecraft skin of the given player """
+    with urllib.request.urlopen(f'https://api.mojang.com/users/profiles/minecraft/'
+                                f'{player_name}') as url:
         try:
             data = loads(url.read().decode())
         except JSONDecodeError:
@@ -22,12 +25,14 @@ def player_by_name(player_name: str) -> Union[tuple, None]:
 
         if data is None:
             return player_name, None
-        else:
-            return data
+
+        return data
 
 
 def player_by_uuid(uuid: str) -> Union[tuple, None]:
-    with urllib.request.urlopen(f'https://sessionserver.mojang.com/session/minecraft/profile/{uuid}') as url:
+    """ download the minecraft skin of the player with the given uuid """
+    with urllib.request.urlopen(f'https://sessionserver.mojang.com/session/minecraft/profile/'
+                                f'{uuid}') as url:
         try:
             data = loads(url.read().decode())
         except JSONDecodeError:
@@ -38,17 +43,18 @@ def player_by_uuid(uuid: str) -> Union[tuple, None]:
         data = loads(base64.b64decode(data.get('properties')[0]
                                       .get("value"))).get('textures').get('SKIN').get('url')
 
-        r = requests.get(data, stream=True)
+        request = requests.get(data, stream=True)
 
-        if r.status_code == 200:
-            r.raw.decode_content = True
-            img = Image.open(BytesIO(r.content))
+        if request.status_code == 200:
+            request.raw.decode_content = True
+            img = Image.open(BytesIO(request.content))
             return player_name, img
-        else:
-            return None
+
+        return None
 
 
 def process_skin(player: tuple) -> tuple:
+    """ generate minetest skin and skin preview images """
     width, height = player[1].size
 
     skin_preview = Image.new(mode='RGBA', size=(16, 32), color=(0, 0, 0, 0))
@@ -107,16 +113,16 @@ def process_skin(player: tuple) -> tuple:
             skin_preview.paste(layer_1, (4, 8), layer_1)
 
         return player[0], mt_skin, skin_preview
-    else:
-        # left arm
-        layer_1 = player[1].crop((44, 20, 48, 32))
-        skin_preview.paste(layer_1, (12, 8), layer_1)
 
-        # left leg
-        layer_1 = player[1].crop((4, 20, 8, 32))
-        skin_preview.paste(layer_1, (8, 20), layer_1)
+    # left arm
+    layer_1 = player[1].crop((44, 20, 48, 32))
+    skin_preview.paste(layer_1, (12, 8), layer_1)
 
-        return player[0], player[1], skin_preview
+    # left leg
+    layer_1 = player[1].crop((4, 20, 8, 32))
+    skin_preview.paste(layer_1, (8, 20), layer_1)
+
+    return player[0], player[1], skin_preview
 
 
 def main():
