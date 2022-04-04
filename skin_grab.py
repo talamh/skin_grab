@@ -94,6 +94,7 @@ def process_skin(player: tuple) -> tuple:
         if args.overlays:
             layer_1 = player[1].crop((0, 32, width, 48))
             mt_skin.paste(layer_1, (0, 16), layer_1)
+
             # right leg overlay
             layer_1 = player[1].crop((4, 36, 8, 48))
             skin_preview.paste(layer_1, (4, 20), layer_1)
@@ -101,6 +102,7 @@ def process_skin(player: tuple) -> tuple:
             # left leg overlay
             layer_1 = player[1].crop((4, 52, 8, 64))
             skin_preview.paste(layer_1, (8, 20), layer_1)
+
             # right arm overlay
             layer_1 = player[1].crop((40, 36, 44, 48))
             skin_preview.paste(layer_1, (0, 8), layer_1)
