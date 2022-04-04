@@ -12,7 +12,7 @@ from PIL import Image
 
 
 def player_by_name(player_name: str) -> Union[tuple, None]:
-    """ download the minecraft skin of the given player """
+    """ download the minecraft skin of the given player name """
     with urllib.request.urlopen(f'https://api.mojang.com/users/profiles/minecraft/'
                                 f'{player_name}') as url:
         try:
